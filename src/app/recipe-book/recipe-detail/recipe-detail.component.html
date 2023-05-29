@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-xs-12">
+    <img class="image-responsive" src="{{ recipe.imgPath }}" alt="" [ngStyle]="{ maxWidth: '400px' }" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <h2>{{ recipe.name }}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle">
+        Manage Recipe
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">To shopping List</a></li>
+        <li><a href="#">Edit Recipe</a></li>
+        <li><a href="#">Delete Recipe</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <br/>
+    <p>{{ recipe.description }}</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <h4>Recipe Ingredients here</h4>
+  </div>
+</div>
