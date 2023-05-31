@@ -1,6 +1,11 @@
 <div class="row">
   <div class="col-xs-12">
-    <img class="image-responsive" src="{{ recipe.imgPath }}" alt="" [ngStyle]="{ maxWidth: '400px' }" />
+    <img
+      class="image-responsive"
+      [src]="recipe.imgPath"
+      alt=""
+      [ngStyle]="{ maxWidth: '400px' }"
+    />
   </div>
 </div>
 <div class="row">
@@ -25,7 +30,7 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <br/>
+    <br />
     <p>{{ recipe.description }}</p>
   </div>
 </div>

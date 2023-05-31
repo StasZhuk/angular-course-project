@@ -4,19 +4,54 @@
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" name="name" class="form-control">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [value]="ingredientForEdit ? ingredientForEdit.name : ''"
+            class="form-control"
+            #inputName
+          />
         </div>
         <div class="col-sm-2 form-group">
           <label for="amount">Amount</label>
-          <input type="number" id="amount" name="amount" class="form-control">
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            [value]="ingredientForEdit ? ingredientForEdit.amount : ''"
+            class="form-control"
+            #inputAmount
+          />
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
           <div class="button-group">
-            <button (click)="addIngredient" class="btn btn-success" type="submit">Add</button>
-            <button (click)="editIngredient" class="btn btn-danger" type="button">Delete</button>
-            <button (click)="clearIngredient" class="btn btn-warning" type="button">Clear</button>
+            <button
+              *ngIf="!ingredientForEdit"
+              (click)="onAddIngredient()"
+              class="btn btn-success"
+              type="button"
+            >
+              Add
+            </button>
+            <button
+              *ngIf="ingredientForEdit"
+              (click)="onEditIngredient()"
+              class="btn btn-info"
+              type="button"
+            >
+              Edit
+            </button>
+            <button
+              *ngIf="ingredientForEdit"
+              (click)="onClear()"
+              class="btn btn-warning"
+              type="button"
+            >
+              Clear
+            </button>
           </div>
         </div>
       </div>
