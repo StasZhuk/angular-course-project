@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { RecipeBookComponent } from './recipe-book/recipe-book.component';
 import { RecipeDetailComponent } from './recipe-book/recipe-detail/recipe-detail.component';
+import { RecipeDetailEmptyComponent } from './recipe-book/recipe-detail-empty/recipe-detail-empty.component';
+import { RecipeEditComponent } from './recipe-book/recipe-edit/recipe-edit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'recipe-book', pathMatch: 'full' },
@@ -11,7 +13,10 @@ const routes: Routes = [
     path: 'recipe-book',
     component: RecipeBookComponent,
     children: [
+      { path: '', component: RecipeDetailEmptyComponent },
+      { path: 'new', component: RecipeEditComponent },
       { path: ':recipeId', component: RecipeDetailComponent },
+      { path: ':recipeId/edit', component: RecipeEditComponent },
     ],
   },
 ];

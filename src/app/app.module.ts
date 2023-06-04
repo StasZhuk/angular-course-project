@@ -18,6 +18,8 @@ import { BetterHighlightDirective } from './directives/better-highlight.directiv
 import { UnlessDirective } from './directives/unless.directive';
 import { DropdownDirective } from './directives/dropdown.directive';
 import { LogService } from './services/log.service';
+import { RecipeDetailEmptyComponent } from './recipe-book/recipe-detail-empty/recipe-detail-empty.component';
+import { RecipeEditComponent } from './recipe-book/recipe-edit/recipe-edit.component';
 
 @NgModule({
   exports: [],
@@ -35,6 +37,8 @@ import { LogService } from './services/log.service';
     BetterHighlightDirective,
     UnlessDirective,
     DropdownDirective,
+    RecipeDetailEmptyComponent,
+    RecipeEditComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [LogService],
