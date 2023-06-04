@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { LogService } from '../services/log.service'
 
 @Component({
   selector: "app-header",
@@ -6,5 +7,10 @@ import { Component } from '@angular/core'
   styleUrls: ["./header.component.scss"]
 })
 export class HeaderComponent {
+  constructor(private logService:LogService) {}
 
+  onLogoClick(e:MouseEvent) {
+    e.preventDefault()
+    this.logService.logServiceInit.emit(true)
+  }
 }

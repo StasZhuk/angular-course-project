@@ -5,6 +5,7 @@ import {
   Output,
 } from '@angular/core';
 import { Ingredient } from '../ingredient.model';
+import { ShoppingListService } from 'src/app/services/shopping-list.service';
 
 @Component({
   selector: 'app-ingredient-item',
@@ -13,10 +14,15 @@ import { Ingredient } from '../ingredient.model';
 })
 export class IngredientItemComponent {
   @Input() ingredient: Ingredient;
-  @Input() isActive: boolean;
   @Output() deletedItem = new EventEmitter<number>();
 
+  constructor(private shoppingListService: ShoppingListService) {}
+
   onDelete(id:number) {
-    this.deletedItem.emit(id)
+    this.shoppingListService.deleteIngredient(this.ingredient.id)
+  }
+
+  onSelect() {
+    this.shoppingListService.selectIngredient(this.ingredient)
   }
 }

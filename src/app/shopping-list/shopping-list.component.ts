@@ -1,36 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../services/shopping-list.service';
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
-  styleUrls: ['./shopping-list.component.scss']
+  styleUrls: ['./shopping-list.component.scss'],
 })
-export class ShoppingListComponent {
-  ingredients: Ingredient[] = [];
-  editIngredient: Ingredient = null;
+export class ShoppingListComponent implements OnInit {
+  ingredients: Ingredient[];
 
-  onAddedIngredient(newIngredient: Ingredient) {
-    this.ingredients.push(newIngredient)
-    console.log(this.ingredients)
-  };
-  onEditedIngredient(editedIngredient: Ingredient) {
-    console.log(editedIngredient, this.editIngredient)
-    console.log(this.ingredients)
-    this.editIngredient = null
-    this.ingredients = this.ingredients.map((ingredient:Ingredient) => {
-      return ingredient.id === editedIngredient.id
-        ? editedIngredient
-        : ingredient
+  constructor(private serviceShoppingList: ShoppingListService) {}
+
+  ngOnInit(): void {
+    this.ingredients = this.serviceShoppingList.getIngredients()
+    this.serviceShoppingList.ingredientsUpdated.subscribe(ingredients => {
+      this.ingredients = ingredients
     })
-  };
-  onClearIngredient() {
-    this.editIngredient = null
-  }
-  onDeleteIngredient(ingredientId: number) {
-    this.ingredients = this.ingredients.filter((ingredient) => ingredient.id !== ingredientId)
-  }
-  onSelectIngredient(ingredient: Ingredient) {
-    this.editIngredient = ingredient
   }
 }

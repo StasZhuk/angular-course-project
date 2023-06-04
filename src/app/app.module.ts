@@ -9,13 +9,18 @@ import { RecipeListComponent } from './recipe-book/recipe-list/recipe-list.compo
 import { RecipeDetailComponent } from './recipe-book/recipe-detail/recipe-detail.component';
 import { RecipeItemComponent } from './recipe-book/recipe-list/recipe-item/recipe-item.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
-import { AppRoutingModule } from './app-routing.module';
 import { IngredientItemComponent } from './shared/ingredient-item/ingredient-item.component';
 
-@NgModule({
-  exports: [
+import { AppRoutingModule } from './app-routing.module';
 
-  ],
+import { BaseHighlightDirective } from './directives/base-highlight.directive';
+import { BetterHighlightDirective } from './directives/better-highlight.directive';
+import { UnlessDirective } from './directives/unless.directive';
+import { DropdownDirective } from './directives/dropdown.directive';
+import { LogService } from './services/log.service';
+
+@NgModule({
+  exports: [],
   declarations: [
     AppComponent,
     HeaderComponent,
@@ -26,12 +31,13 @@ import { IngredientItemComponent } from './shared/ingredient-item/ingredient-ite
     RecipeItemComponent,
     ShoppingEditComponent,
     IngredientItemComponent,
+    BaseHighlightDirective,
+    BetterHighlightDirective,
+    UnlessDirective,
+    DropdownDirective,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, AppRoutingModule],
+  providers: [LogService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

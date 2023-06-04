@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Recipe } from '../../recipe.model';
+import { RecipeService } from 'src/app/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-item',
@@ -7,11 +8,12 @@ import { Recipe } from '../../recipe.model';
   styleUrls: ['./recipe-item.component.scss'],
 })
 export class RecipeItemComponent {
-  @Output() recipeSelected = new EventEmitter<void>()
-  @Input() recipe: Recipe
+  @Input() recipe: Recipe;
 
-  onSelected(e:MouseEvent) {
-    e.preventDefault()
-    this.recipeSelected.emit()
+  constructor(private recipeService: RecipeService) {}
+
+  onSelect(recipe: Recipe) {
+    this.recipeService.detailRecipeSelected.emit(recipe);
+    return false;
   }
 }

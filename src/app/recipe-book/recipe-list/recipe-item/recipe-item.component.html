@@ -1,6 +1,6 @@
-<a href="#" (click)="onSelected($event)" class="list-group-item clearfix">
+<a [routerLink]="['.', recipe.id]" class="list-group-item clearfix">
   <div class="pull-left">
-    <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
+    <h3 class="list-group-item-heading">{{ recipe.name }}</h3>
     <p class="list-group-item-text">{{ recipe.description }}</p>
   </div>
   <span class="pull-right">
