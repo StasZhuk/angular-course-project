@@ -5,6 +5,7 @@
     <ul class="list-group">
       <li *ngFor="let ingredient of ingredients">
         <app-ingredient-item
+          [canDelete]="true"
           [active]="activeId === ingredient.id"
           [ingredient]="ingredient"
         ></app-ingredient-item>

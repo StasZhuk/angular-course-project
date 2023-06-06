@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class IngredientItemComponent {
   @Input() ingredient: Ingredient;
   @Input() active: boolean;
+  @Input() canDelete: boolean = false;
   @Output() deletedItem = new EventEmitter<number>();
 
   constructor(

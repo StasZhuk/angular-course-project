@@ -27,6 +27,46 @@
       formControlName="imgPath"
     />
   </div>
+  <div class="form-group">
+    <label class="from-label" [style]="{ marginRight: '20px' }"
+      >Ingredients:</label
+    >
+    <button (click)="onAddIngredient()" type="button" class="btn btn-success">
+      Add ingredient
+    </button>
+    <div
+      *ngIf="ingredientsControls.length"
+      style="margin: 20px 0"
+      formArrayName="ingredients"
+    >
+      <div
+        class="form-group d-flex gap-2"
+        *ngFor="let ingredient of ingredientsControls; let i = index"
+        [formGroupName]="i"
+      >
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          formControlName="name"
+        />
+        <input
+          type="number"
+          class="form-control"
+          name="amount"
+          formControlName="amount"
+          style="max-width: 100px"
+        />
+        <button
+          type="button"
+          (click)="onRemoveIngredient(i)"
+          class="btn btn-danger"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="d-flex gap-1">
     <button (click)="onBack()" type="button" class="btn btn-secondary">
       Back
@@ -41,7 +81,7 @@
     </button>
     <button
       *ngIf="editMode"
-      [disabled]="recipeForm.invalid"
+      [disabled]="recipeForm.invalid || !recipeForm.dirty"
       type="submit"
       class="btn btn-primary"
     >

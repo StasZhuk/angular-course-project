@@ -29,38 +29,35 @@ export class ShoppingEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(({ id }) => {
       this.editMode = id !== undefined;
-
-      if (this.editMode) {
-        this.id = Number(id);
-      }
-
-      this.ingredient = this.editMode
-        ? this.shoppingService.getIngredient(this.id)
-        : INIT_INGREDIENT_STATE;
-
-      this.shoppingForm = new FormGroup({
-        name: new FormControl(this.ingredient.name, [Validators.required]),
-        amount: new FormControl(this.ingredient.amount, [Validators.required]),
-      });
+      this.id = this.editMode ? Number(id) : undefined;
+      this.initForm();
     });
   }
 
-  onAddIngredient() {
-    this.shoppingService.addIngredient(
-      new Ingredient({
-        name: this.shoppingForm.value.name,
-        amount: this.shoppingForm.value.amount,
-      })
-    );
-    this.onClear();
+  private initForm() {
+    this.ingredient = this.editMode
+      ? this.shoppingService.getIngredient(this.id)
+      : INIT_INGREDIENT_STATE;
+
+    this.shoppingForm = new FormGroup({
+      name: new FormControl(this.ingredient.name, [Validators.required]),
+      amount: new FormControl(this.ingredient.amount, [Validators.required]),
+    });
   }
 
-  onEditIngredient() {
-    this.shoppingService.editIngredient({
+  onSubmit() {
+    const submitData: Ingredient = {
       id: this.id,
       name: this.shoppingForm.value.name,
       amount: this.shoppingForm.value.amount,
-    });
+    };
+
+    if (this.editMode) {
+      this.shoppingService.editIngredient(submitData);
+    } else {
+      this.shoppingService.addIngredient(new Ingredient(submitData));
+    }
+
     this.onClear();
   }
 
