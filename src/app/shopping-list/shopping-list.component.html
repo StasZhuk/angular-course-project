@@ -4,7 +4,10 @@
     <hr *ngIf="ingredients && ingredients.length" />
     <ul class="list-group">
       <li *ngFor="let ingredient of ingredients">
-        <app-ingredient-item [ingredient]="ingredient"></app-ingredient-item>
+        <app-ingredient-item
+          [active]="activeId === ingredient.id"
+          [ingredient]="ingredient"
+        ></app-ingredient-item>
       </li>
     </ul>
   </div>

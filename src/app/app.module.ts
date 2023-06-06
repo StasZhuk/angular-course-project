@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -20,6 +21,7 @@ import { DropdownDirective } from './directives/dropdown.directive';
 import { LogService } from './services/log.service';
 import { RecipeDetailEmptyComponent } from './recipe-book/recipe-detail-empty/recipe-detail-empty.component';
 import { RecipeEditComponent } from './recipe-book/recipe-edit/recipe-edit.component';
+import { FormsComponent } from './reactive-forms/forms.component';
 
 @NgModule({
   exports: [],
@@ -39,8 +41,13 @@ import { RecipeEditComponent } from './recipe-book/recipe-edit/recipe-edit.compo
     DropdownDirective,
     RecipeDetailEmptyComponent,
     RecipeEditComponent,
+    FormsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+  ],
   providers: [LogService],
   bootstrap: [AppComponent],
 })

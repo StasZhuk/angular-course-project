@@ -1,19 +1,19 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingListService {
-  ingredient: Ingredient = null;
   ingredients: Ingredient[] = [
     new Ingredient({
+      id: 3,
       name: 'Tomato',
       amount: 121,
     }),
   ];
-  ingredientUpdated = new EventEmitter<Ingredient>();
-  ingredientsUpdated = new EventEmitter<Ingredient[]>();
+  ingredientsUpdated = new Subject<Ingredient[]>();
 
   constructor() {}
 
@@ -21,35 +21,31 @@ export class ShoppingListService {
     return [...this.ingredients];
   }
 
+  getIngredient(ingredientId: number) {
+    return this.ingredients.find((i) => i.id === ingredientId);
+  }
+
   addIngredient(newIngredient: Ingredient) {
     this.ingredients.push(newIngredient);
-    this.ingredientsUpdated.emit(this.getIngredients())
+    this.ingredientsUpdated.next(this.ingredients);
   }
 
   addIngredients(newIngredients: Ingredient[]) {
     this.ingredients.push(...newIngredients);
-    this.ingredientsUpdated.emit(this.getIngredients())
+    this.ingredientsUpdated.next(this.ingredients);
   }
 
-  editIngredient(newIngredient: Ingredient) {
-    this.ingredients = this.ingredients.map((ingredient: Ingredient) => {
-      return ingredient.id === newIngredient.id ? newIngredient : ingredient;
+  editIngredient(editIngredient: Ingredient) {
+    this.ingredients = this.ingredients.map((i: Ingredient) => {
+      return i.id === editIngredient.id ? editIngredient : i;
     });
-    this.ingredientUpdated.emit(newIngredient);
-  }
-
-  clearIngredient() {
-    this.ingredientUpdated.emit(null);
+    this.ingredientsUpdated.next(this.ingredients);
   }
 
   deleteIngredient(ingredientId: number) {
     this.ingredients = this.ingredients.filter(
       (ingredient) => ingredient.id !== ingredientId
     );
-    this.ingredientsUpdated.emit(this.getIngredients());
-  }
-
-  selectIngredient(ingredient: Ingredient) {
-    this.ingredientUpdated.emit(ingredient);
+    this.ingredientsUpdated.next(this.ingredients);
   }
 }

@@ -1,12 +1,13 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChild,
-  Input,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingredient } from 'src/app/shared/ingredient.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
+const INIT_INGREDIENT_STATE: Ingredient = {
+  name: null,
+  amount: null,
+};
 
 @Component({
   selector: 'app-shopping-edit',
@@ -14,42 +15,60 @@ import { Ingredient } from 'src/app/shared/ingredient.model';
   styleUrls: ['./shopping-edit.component.scss'],
 })
 export class ShoppingEditComponent implements OnInit {
-  @Input() ingredientForEdit: Ingredient = null;
+  editMode: boolean = false;
+  ingredient: Ingredient;
+  id: number;
+  shoppingForm: FormGroup;
 
-  @ViewChild('inputName') inputNameRef: ElementRef;
-  @ViewChild('inputAmount') inputAmountRef: ElementRef;
-
-  constructor(private shoppingListService: ShoppingListService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private shoppingService: ShoppingListService
+  ) {}
 
   ngOnInit(): void {
-    this.shoppingListService.ingredientUpdated.subscribe(ingredient => {
-      this.ingredientForEdit = ingredient
-    })
+    this.route.queryParams.subscribe(({ id }) => {
+      this.editMode = id !== undefined;
+
+      if (this.editMode) {
+        this.id = Number(id);
+      }
+
+      this.ingredient = this.editMode
+        ? this.shoppingService.getIngredient(this.id)
+        : INIT_INGREDIENT_STATE;
+
+      this.shoppingForm = new FormGroup({
+        name: new FormControl(this.ingredient.name, [Validators.required]),
+        amount: new FormControl(this.ingredient.amount, [Validators.required]),
+      });
+    });
   }
 
   onAddIngredient() {
-    const newIngredient = new Ingredient({
-      name: this.inputNameRef.nativeElement.value,
-      amount: this.inputAmountRef.nativeElement.value,
-    })
-
-    this.shoppingListService.addIngredient(newIngredient);
-    this.onClear()
+    this.shoppingService.addIngredient(
+      new Ingredient({
+        name: this.shoppingForm.value.name,
+        amount: this.shoppingForm.value.amount,
+      })
+    );
+    this.onClear();
   }
 
   onEditIngredient() {
-    this.shoppingListService.editIngredient({
-      id: this.ingredientForEdit.id,
-      name: this.inputNameRef.nativeElement.value,
-      amount: this.inputAmountRef.nativeElement.value,
+    this.shoppingService.editIngredient({
+      id: this.id,
+      name: this.shoppingForm.value.name,
+      amount: this.shoppingForm.value.amount,
     });
-    this.onClear()
+    this.onClear();
   }
 
   onClear() {
-    this.inputNameRef.nativeElement.value = '';
-    this.inputAmountRef.nativeElement.value = '';
-    this.inputNameRef.nativeElement.focus();
-    this.shoppingListService.clearIngredient()
+    this.shoppingForm.reset();
+
+    if (this.id) {
+      this.router.navigate([], { relativeTo: this.route, queryParams: {} });
+    }
   }
 }

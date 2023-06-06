@@ -1,10 +1,11 @@
 <a
   class="list-group-item"
+  [ngClass]="{ active: active }"
   [style.cursor]="'pointer'"
   (click)="onSelect()"
 >
   <span>{{ ingredient.name }}</span>
   <span> ({{ ingredient.amount }})</span>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</span>
-  <button class="btn btn-sm" (click)="onDelete(ingredient.id)">Delete</button>
+  <button class="btn btn-sm btn-danger" (click)="onDelete()">Delete</button>
 </a>

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
-    <form>
+    <form [formGroup]="shoppingForm">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
@@ -8,9 +8,8 @@
             type="text"
             id="name"
             name="name"
-            [value]="ingredientForEdit ? ingredientForEdit.name : ''"
+            formControlName="name"
             class="form-control"
-            #inputName
           />
         </div>
         <div class="col-sm-2 form-group">
@@ -18,10 +17,9 @@
           <input
             type="number"
             id="amount"
+            formControlName="amount"
             name="amount"
-            [value]="ingredientForEdit ? ingredientForEdit.amount : ''"
             class="form-control"
-            #inputAmount
           />
         </div>
       </div>
@@ -29,23 +27,23 @@
         <div class="col-xs-12">
           <div class="button-group">
             <button
-              *ngIf="!ingredientForEdit"
               (click)="onAddIngredient()"
               class="btn btn-success"
               type="button"
+              [disabled]="shoppingForm.invalid"
             >
               Add
             </button>
             <button
-              *ngIf="ingredientForEdit"
               (click)="onEditIngredient()"
               class="btn btn-info"
               type="button"
+              [disabled]="!editMode || shoppingForm.invalid || (editMode && !shoppingForm.dirty)"
             >
               Edit
             </button>
             <button
-              *ngIf="ingredientForEdit"
+              [disabled]="!id && !shoppingForm.dirty"
               (click)="onClear()"
               class="btn btn-warning"
               type="button"

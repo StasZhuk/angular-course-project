@@ -1,16 +1,10 @@
-import { Component } from '@angular/core'
-import { LogService } from '../services/log.service'
+import { Component } from '@angular/core';
 
 @Component({
-  selector: "app-header",
-  templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.scss"]
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  constructor(private logService:LogService) {}
-
-  onLogoClick(e:MouseEvent) {
-    e.preventDefault()
-    this.logService.logServiceInit.emit(true)
-  }
+  constructor() {}
 }
