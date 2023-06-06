@@ -3,6 +3,7 @@ import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
 
 const INIT_INGREDIENT_STATE: Ingredient = {
   name: null,
@@ -41,7 +42,10 @@ export class ShoppingEditComponent implements OnInit {
 
     this.shoppingForm = new FormGroup({
       name: new FormControl(this.ingredient.name, [Validators.required]),
-      amount: new FormControl(this.ingredient.amount, [Validators.required]),
+      amount: new FormControl(this.ingredient.amount, [
+        Validators.required,
+        Validators.pattern(REG_EXP_POSITIVE_NUMBERS),
+      ]),
     });
   }
 

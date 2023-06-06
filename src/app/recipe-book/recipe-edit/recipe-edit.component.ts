@@ -12,6 +12,7 @@ import { Recipe } from './../recipe.model';
 import { RecipesService } from 'src/app/services/recipes.service';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { getRandomDigit } from 'src/app/helpers/numbers';
+import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
 
 const INIT_RECIPE_STATE: Recipe = {
   name: '',
@@ -105,6 +106,7 @@ export class RecipeEditComponent implements OnInit {
       ]),
       amount: new FormControl(ingredient ? ingredient.amount : null, [
         Validators.required,
+        Validators.pattern(REG_EXP_POSITIVE_NUMBERS)
       ]),
     });
   }
