@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -22,6 +22,8 @@ import { LogService } from './services/log.service';
 import { RecipeDetailEmptyComponent } from './recipe-book/recipe-detail-empty/recipe-detail-empty.component';
 import { RecipeEditComponent } from './recipe-book/recipe-edit/recipe-edit.component';
 import { FormsComponent } from './reactive-forms/forms.component';
+import { ShortenPipe } from './pipes/shorten.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
 
 @NgModule({
   exports: [],
@@ -42,6 +44,8 @@ import { FormsComponent } from './reactive-forms/forms.component';
     RecipeDetailEmptyComponent,
     RecipeEditComponent,
     FormsComponent,
+    ShortenPipe,
+    FilterPipe,
   ],
   imports: [
     BrowserModule,

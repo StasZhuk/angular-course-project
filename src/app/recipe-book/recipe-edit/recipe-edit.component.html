@@ -25,7 +25,11 @@
       class="form-control"
       name="imgPath"
       formControlName="imgPath"
+      #imgUrl
     />
+    <div *ngIf="imgUrl.value">
+      <img [src]="imgUrl.value" alt="preview" class="image-responsive" style="max-height: 100px;margin:10px 0"  />
+    </div>
   </div>
   <div class="form-group">
     <label class="from-label" [style]="{ marginRight: '20px' }"
