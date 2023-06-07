@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RecipesService } from 'src/app/services/recipes.service';
 import { Recipe } from '../recipe.model';
 import { Subscription } from 'rxjs';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-recipe-list',
@@ -13,20 +14,26 @@ import { Subscription } from 'rxjs';
 export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[];
   recipesServiceSubscription: Subscription;
+  isFetching: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private storageService: StorageService,
     private recipesService: RecipesService
   ) {}
 
   ngOnInit(): void {
     this.recipes = this.recipesService.getRecipes();
+
     this.recipesServiceSubscription =
       this.recipesService.recipesUpdated.subscribe((recipes) => {
-        console.log(recipes, 'tes')
         this.recipes = recipes;
       });
+
+    this.storageService.isFetchingRecipes.subscribe(
+      (fetching) => (this.isFetching = fetching)
+    );
   }
 
   onNewRecipe() {

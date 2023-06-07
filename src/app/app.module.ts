@@ -24,6 +24,7 @@ import { RecipeEditComponent } from './recipe-book/recipe-edit/recipe-edit.compo
 import { FormsComponent } from './reactive-forms/forms.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   exports: [],
@@ -51,6 +52,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [LogService],
   bootstrap: [AppComponent],
