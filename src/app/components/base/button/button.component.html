@@ -1,0 +1,18 @@
+<button
+  class="btn"
+  [type]="type"
+  [ngClass]="{
+    'btn-primary': color === 'primary',
+    'btn-secondary': color === 'secondary',
+    'btn-danger': color === 'danger',
+    'btn-warning': color === 'warning',
+    'btn-info': color === 'info',
+    '--fetching': fetching
+  }"
+  [disabled]="disabled"
+  [style]="style"
+>
+  {{ title }}
+  <ng-content></ng-content>
+  <app-spinner *ngIf="fetching" [absolute]="true" color="white" />
+</button>

@@ -1,0 +1,75 @@
+.wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  &.--abs {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.lds-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+
+  &.text {
+    &-white {
+      color: white;
+    }
+
+    &-black {
+      color: black;
+    }
+  }
+
+  &.--s {
+    &-small {
+      width: 20px;
+      height: 20px;
+
+      &:after  {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    &-big {
+      width: 40px;
+      height: 40px;
+
+      &:after  {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  &:after {
+    content: " ";
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 4px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-color: currentColor rgba(0, 0, 0, 0) currentColor rgba(0, 0, 0, 0);
+    animation: lds-ring 1s linear infinite;
+  }
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

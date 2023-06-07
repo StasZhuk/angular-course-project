@@ -25,6 +25,8 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { LogService } from 'src/app/services/log.service';
 import { ShortenPipe } from 'src/app/pipes/shorten.pipe';
 import { FilterPipe } from 'src/app/pipes/filter.pipe';
+import { SpinnerComponent } from './components/base/spinner/spinner.component';
+import { ButtonComponent } from './components/base/button/button.component';
 
 @NgModule({
   exports: [],
@@ -47,6 +49,8 @@ import { FilterPipe } from 'src/app/pipes/filter.pipe';
     ShortenPipe,
     FilterPipe,
     AuthComponent,
+    SpinnerComponent,
+    ButtonComponent,
   ],
   imports: [
     BrowserModule,

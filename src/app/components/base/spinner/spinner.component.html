@@ -1,0 +1,21 @@
+<div
+  class="wrapper"
+  [ngStyle]="{
+    width: width,
+    height: height,
+  }"
+  [ngClass]="{ '--abs': absolute }"
+>
+  <div
+    class="lds-ring"
+    [ngClass]="{
+      '--s-small': size === 'small',
+      '--s-big': size === 'big',
+      'text-primary': color === 'primary',
+      'text-danger': color === 'danger',
+      'text-success': color === 'success',
+      'text-white': color === 'white',
+      'text-black': color === 'black'
+    }"
+  ></div>
+</div>
