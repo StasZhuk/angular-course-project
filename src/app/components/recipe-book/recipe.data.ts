@@ -1,5 +1,5 @@
-import { Ingredient } from "../shared/ingredient.model";
-import { Recipe } from "./recipe.model";
+import { Recipe } from 'src/app/models/recipe.model';
+import { Ingredient } from 'src/app/models/ingredient.model';
 
 export const RECIPES_MOCK = [
   new Recipe({

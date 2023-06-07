@@ -3,8 +3,8 @@ import { StorageService } from './storage.service';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { Recipe } from 'src/app/models/recipe.model';
 import { RecipesService } from './recipes.service';
-import { Recipe } from '../components/recipe-book/recipe.model';
 
 export const recipesResolver = (
   route: ActivatedRouteSnapshot,

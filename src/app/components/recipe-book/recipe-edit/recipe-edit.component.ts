@@ -8,11 +8,12 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Recipe } from './../recipe.model';
 import { RecipesService } from 'src/app/services/recipes.service';
-import { Ingredient } from 'src/app/components/shared/ingredient.model';
 import { getRandomDigit } from 'src/app/helpers/numbers';
 import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
+
+import { Ingredient } from 'src/app/models/ingredient.model';
+import { Recipe } from 'src/app/models/recipe.model';
 
 const INIT_RECIPE_STATE: Recipe = {
   name: '',
@@ -89,7 +90,7 @@ export class RecipeEditComponent implements OnInit {
       this.recipesService.createRecipe(recipeData);
     }
 
-    this.onBack()
+    this.onBack();
   }
 
   onBack() {
@@ -106,7 +107,7 @@ export class RecipeEditComponent implements OnInit {
       ]),
       amount: new FormControl(ingredient ? ingredient.amount : null, [
         Validators.required,
-        Validators.pattern(REG_EXP_POSITIVE_NUMBERS)
+        Validators.pattern(REG_EXP_POSITIVE_NUMBERS),
       ]),
     });
   }

@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
-import { Ingredient } from 'src/app/components/shared/ingredient.model';
+import { Ingredient } from 'src/app/models/ingredient.model';
 
 @Component({
   selector: 'app-shopping-list',

@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 
 import { RecipesService } from 'src/app/services/recipes.service';
 import { StorageService } from 'src/app/services/storage.service';
-import { Recipe } from '../recipe.model';
+
+import { Recipe } from 'src/app/models/recipe.model';
 
 @Component({
   selector: 'app-recipe-list',
