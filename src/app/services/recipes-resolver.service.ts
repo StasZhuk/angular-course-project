@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { RecipesService } from './recipes.service';
-import { Recipe } from '../recipe-book/recipe.model';
+import { Recipe } from '../components/recipe-book/recipe.model';
 
 export const recipesResolver = (
   route: ActivatedRouteSnapshot,

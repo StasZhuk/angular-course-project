@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Ingredient } from '../ingredient.model';
-import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { ShoppingListService } from 'src/app/services/shopping-list.service';
+import { Ingredient } from 'src/app/components/shared/ingredient.model';
 
 @Component({
   selector: 'app-ingredient-item',
@@ -17,7 +18,7 @@ export class IngredientItemComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private shoppingListService: ShoppingListService,
+    private shoppingListService: ShoppingListService
   ) {}
 
   onDelete() {

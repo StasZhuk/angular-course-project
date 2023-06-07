@@ -4,7 +4,7 @@
       class="image-responsive"
       [src]="recipe.imgPath"
       alt=""
-      [ngStyle]="{ maxWidth: '400px' }"
+      [ngStyle]="{ maxWidth: '100%', maxHeight: '400px' }"
     />
   </div>
 </div>
@@ -21,7 +21,9 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <li><a (click)="onAddIngredientsToShoppingList()">To shopping List</a></li>
+        <li>
+          <a (click)="onAddIngredientsToShoppingList()">To shopping List</a>
+        </li>
         <li><a routerLink="edit">Edit Recipe</a></li>
         <li><a (click)="onDelete()">Delete Recipe</a></li>
       </ul>

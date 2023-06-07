@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { API_URL } from '../constants/api';
+import { Subject, tap } from 'rxjs';
+
 import { RecipesService } from './recipes.service';
-import { Recipe } from '../recipe-book/recipe.model';
-import { Subject, catchError, tap } from 'rxjs';
+import { API_URL } from '../constants/api';
+import { Recipe } from '../components/recipe-book/recipe.model';
 
 const RECIPES_URL = API_URL + 'recipes.json';
 

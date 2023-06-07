@@ -1,4 +1,4 @@
-import { getRandomDigit } from "../helpers/numbers";
+import { getRandomDigit } from "src/app/helpers/numbers";
 
 export class Ingredient {
   public id?: number;

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ShoppingListService } from 'src/app/services/shopping-list.service';
-import { Ingredient } from 'src/app/shared/ingredient.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
+import { ShoppingListService } from 'src/app/services/shopping-list.service';
+import { Ingredient } from 'src/app/components/shared/ingredient.model';
 
 const INIT_INGREDIENT_STATE: Ingredient = {
   name: null,

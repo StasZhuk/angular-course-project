@@ -1,5 +1,5 @@
-import { getRandomDigit } from '../helpers/numbers';
-import { Ingredient } from '../shared/ingredient.model';
+import { getRandomDigit } from 'src/app/helpers/numbers';
+import { Ingredient } from 'src/app/components/shared/ingredient.model';
 
 export class Recipe {
   public id?: number;

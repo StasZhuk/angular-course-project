@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Recipe } from '../recipe-book/recipe.model';
-import { Ingredient } from '../shared/ingredient.model';
+import { Recipe } from 'src/app/components/recipe-book/recipe.model';
+import { Ingredient } from 'src/app/components/shared/ingredient.model';
+
 import { ShoppingListService } from './shopping-list.service';
 
 @Injectable({

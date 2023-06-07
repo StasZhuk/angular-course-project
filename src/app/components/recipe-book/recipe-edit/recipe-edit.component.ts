@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Recipe } from './../recipe.model';
 import { RecipesService } from 'src/app/services/recipes.service';
-import { Ingredient } from 'src/app/shared/ingredient.model';
+import { Ingredient } from 'src/app/components/shared/ingredient.model';
 import { getRandomDigit } from 'src/app/helpers/numbers';
 import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
 
