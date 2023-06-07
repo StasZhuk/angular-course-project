@@ -1,6 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, tap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+
+import { User, UserStorageData } from 'src/app//models/user.model';
 
 const API_KEY = 'AIzaSyANZrf2GJDHyCVhHaevcjaTaOwOOr6uPd0';
 const AUTH_ENDPOINT = 'https://identitytoolkit.googleapis.com/v1/accounts';
@@ -35,7 +38,9 @@ export interface AuthResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  user = new BehaviorSubject<User>(null);
+
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(data: AuthRequestData) {
     data.returnSecureToken = true;
@@ -43,18 +48,8 @@ export class AuthService {
     return this.http
       .post<AuthResponseData>(getApiEndpoint(endpointsNames.LOGIN), data)
       .pipe(
-        tap((loginRes) => {
-          console.log({ loginRes });
-        }),
-        catchError(({ error }) => {
-          let errorMessage = 'Unknown error!';
-
-          if (error && error.error) {
-            errorMessage = error.error.message;
-          }
-
-          return throwError(() => errorMessage);
-        })
+        catchError(this.errorNormalize),
+        tap((data) => this.handleUser(data))
       );
   }
 
@@ -64,18 +59,57 @@ export class AuthService {
     return this.http
       .post<AuthResponseData>(getApiEndpoint(endpointsNames.SIGNUP), data)
       .pipe(
-        tap((signupRes) => {
-          console.log({ signupRes });
-        }),
-        catchError(({ error }) => {
-          let errorMessage = 'Unknown error!';
-
-          if (error && error.error) {
-            errorMessage = error.error.message;
-          }
-
-          return throwError(() => errorMessage);
-        })
+        catchError(this.errorNormalize),
+        tap((data) => this.handleUser(data))
       );
+  }
+
+  private errorNormalize({ error }: HttpErrorResponse) {
+    let errorMessage = 'Unknown error!';
+
+    if (error && error.error) {
+      errorMessage = error.error.message;
+    }
+
+    return throwError(() => errorMessage);
+  }
+
+  private handleUser(loginRes: AuthResponseData) {
+    const expirationDate = new Date(
+      new Date().getTime() + Number(loginRes.expiresIn) * 1000
+    );
+    const user = new User(
+      loginRes.localId,
+      loginRes.email,
+      loginRes.idToken,
+      expirationDate
+    );
+    localStorage.setItem('user', JSON.stringify(user));
+    this.user.next(user);
+  }
+
+  logout() {
+    this.user.next(null);
+    localStorage.removeItem('user');
+    this.router.navigate(['/auth']);
+  }
+
+  getSession() {
+    const userData: UserStorageData = JSON.parse(localStorage.getItem('user'));
+
+    if (!userData) {
+      return false;
+    }
+
+    const user = new User(
+      userData.id,
+      userData.email,
+      userData._token,
+      new Date(userData._tokenExpirationDate)
+    );
+
+    if (user.token) {
+      this.user.next(user);
+    }
   }
 }

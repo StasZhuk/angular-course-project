@@ -6,22 +6,23 @@
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li routerLinkActive="active">
+          <li routerLinkActive="active" *ngIf="isAuth">
             <a class="navbar-link" routerLink="/recipe-book">Recipe book </a>
           </li>
-          <li routerLinkActive="active">
+          <li routerLinkActive="active" *ngIf="isAuth">
             <a class="navbar-link" routerLink="/shopping-list">
               Shopping list
             </a>
           </li>
-          <li routerLinkActive="active">
-            <a class="navbar-link" routerLink="/auth">
-              Auth
-            </a>
+          <li routerLinkActive="active" *ngIf="!isAuth" >
+            <a class="navbar-link" routerLink="/auth"> Auth </a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li appDropdown class="dropdown">
+          <li *ngIf="isAuth">
+            <a (click)="onLogout()" class="navbar-link">Logout</a>
+          </li>
+          <li appDropdown class="dropdown" *ngIf="isAuth" >
             <a class="dropdown-toggler" role="button">
               Manage <span class="caret"></span>
             </a>

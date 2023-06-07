@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from 'src/app/app.component';
 import { HeaderComponent } from 'src/app/components/layout/header/header.component';
@@ -27,6 +27,7 @@ import { ShortenPipe } from 'src/app/pipes/shorten.pipe';
 import { FilterPipe } from 'src/app/pipes/filter.pipe';
 import { SpinnerComponent } from './components/base/spinner/spinner.component';
 import { ButtonComponent } from './components/base/button/button.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   exports: [],
@@ -59,7 +60,11 @@ import { ButtonComponent } from './components/base/button/button.component';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [LogService],
+  providers: [LogService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
