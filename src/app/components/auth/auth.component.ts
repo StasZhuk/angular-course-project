@@ -27,9 +27,9 @@ export class AuthComponent {
     this.isFetching = true;
     this.error = undefined;
 
-    const onError = ({ error }) => {
+    const onError = (errorMessage) => {
       this.isFetching = false;
-      this.error = error.error.message;
+      this.error = errorMessage;
     };
 
     const onComplete = (res) => {

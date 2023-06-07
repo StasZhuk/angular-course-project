@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 
 const API_KEY = 'AIzaSyANZrf2GJDHyCVhHaevcjaTaOwOOr6uPd0';
 const AUTH_ENDPOINT = 'https://identitytoolkit.googleapis.com/v1/accounts';
@@ -45,11 +45,16 @@ export class AuthService {
       .pipe(
         tap((loginRes) => {
           console.log({ loginRes });
+        }),
+        catchError(({ error }) => {
+          let errorMessage = 'Unknown error!';
+
+          if (error && error.error) {
+            errorMessage = error.error.message;
+          }
+
+          return throwError(() => errorMessage);
         })
-        // catchError((err, caught) => {
-        //   console.log({ err });
-        //   return caught;
-        // })
       );
   }
 
@@ -61,11 +66,16 @@ export class AuthService {
       .pipe(
         tap((signupRes) => {
           console.log({ signupRes });
+        }),
+        catchError(({ error }) => {
+          let errorMessage = 'Unknown error!';
+
+          if (error && error.error) {
+            errorMessage = error.error.message;
+          }
+
+          return throwError(() => errorMessage);
         })
-        // catchError((err, caught) => {
-        //   console.log({ err });
-        //   return caught;
-        // })
       );
   }
 }
