@@ -20,15 +20,15 @@ interface AuthRequestData {
   returnSecureToken?: boolean;
 }
 
-interface AuthResponseData {
+export interface AuthResponseData {
   idToken: string;
   email: string;
   refreshToken: string;
   expiresIn: string;
   localId: string;
-  registered: boolean;
   displayName: string;
   kind: string;
+  registered?: boolean;
 }
 
 @Injectable({

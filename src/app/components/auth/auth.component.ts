@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthResponseData, AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -11,12 +12,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class AuthComponent {
   isLoginMode: boolean = true;
   isFetching: boolean = false;
-  error: string;
+  error: string = null;
 
   constructor(private authService: AuthService) {}
 
   onToggleMode() {
     this.isLoginMode = !this.isLoginMode;
+    this.error = null;
   }
 
   onSubmit(formAuth: NgForm) {
@@ -24,30 +26,25 @@ export class AuthComponent {
       return false;
     }
 
+    let authObserver: Observable<AuthResponseData>;
+    this.error = null;
     this.isFetching = true;
-    this.error = undefined;
-
-    const onError = (errorMessage) => {
-      this.isFetching = false;
-      this.error = errorMessage;
-    };
-
-    const onComplete = (res) => {
-      console.log(res);
-      this.isFetching = false;
-      formAuth.reset();
-    };
 
     if (this.isLoginMode) {
-      this.authService.login(formAuth.value).subscribe({
-        next: onComplete,
-        error: onError,
-      });
+      authObserver = this.authService.login(formAuth.value);
     } else {
-      this.authService.signup(formAuth.value).subscribe({
-        next: onComplete,
-        error: onError,
-      });
+      authObserver = this.authService.signup(formAuth.value);
     }
+
+    authObserver.subscribe({
+      next: () => {
+        this.isFetching = false;
+        formAuth.reset();
+      },
+      error: (errorMessage) => {
+        this.isFetching = false;
+        this.error = errorMessage;
+      },
+    });
   }
 }
