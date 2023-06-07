@@ -15,13 +15,15 @@ export const authGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  return authService.user.pipe(map((user) => {
-    const isAuth = !!user
+  return authService.user.pipe(
+    map((user) => {
+      const isAuth = !!user;
 
-    if (!isAuth) {
-      router.navigate(['/auth'])
-    }
+      if (!isAuth) {
+        return router.createUrlTree(['/auth']);
+      }
 
-    return isAuth
-  }));
+      return isAuth;
+    })
+  );
 };
