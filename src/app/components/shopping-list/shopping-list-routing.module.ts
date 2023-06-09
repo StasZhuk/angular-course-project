@@ -8,7 +8,7 @@ import { authGuard } from 'src/app/components/auth/auth.guard';
   imports: [
     RouterModule.forChild([
       {
-        path: 'shopping-list',
+        path: '',
         component: ShoppingListComponent,
         canActivate: [authGuard],
       },
