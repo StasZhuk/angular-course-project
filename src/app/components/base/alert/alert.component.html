@@ -1,0 +1,8 @@
+<div class="backdrop"></div>
+<div class="alert-box">
+  <h4 *ngIf="title" class="alert-box-title">{{ title }}</h4>
+  <h6>{{ message }}</h6>
+  <div class="text-right">
+    <app-button (click)="onClose()">Ok</app-button>
+  </div>
+</div>
