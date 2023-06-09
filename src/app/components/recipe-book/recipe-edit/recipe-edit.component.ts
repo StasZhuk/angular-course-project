@@ -32,7 +32,10 @@ export class RecipeEditComponent implements OnInit {
   id: number;
   recipe: Recipe;
   recipeForm: FormGroup;
-  ingredientsControls: AbstractControl[];
+
+  get ingredientsControls() {
+    return (this.recipeForm.get('ingredients') as FormArray).controls;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -75,7 +78,6 @@ export class RecipeEditComponent implements OnInit {
     });
 
     const ingredientsControls = <FormArray>this.recipeForm.get('ingredients');
-    this.ingredientsControls = ingredientsControls.controls;
   }
 
   onSubmit() {
