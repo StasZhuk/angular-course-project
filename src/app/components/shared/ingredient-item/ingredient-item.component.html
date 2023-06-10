@@ -3,7 +3,6 @@
   [ngClass]="{ active: active }"
   [style.cursor]="'pointer'"
   [style.pointerEvents]="canDelete ? 'all' : 'none'"
-  (click)="canDelete ? onSelect() : null"
 >
   <span>{{ ingredient.name }}</span>
   <span> ({{ ingredient.amount }})</span>

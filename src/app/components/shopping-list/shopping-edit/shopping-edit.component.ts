@@ -1,10 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
-import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingredient } from 'src/app/models/ingredient.model';
+
+import { ShoppingListInitialState } from 'src/app/store/reducers/shopping-list.reducer';
+import {
+  addIngredient,
+  stopEditingIngredient,
+  updateIngredient,
+} from 'src/app/store/actions/shopping-list.actions';
+import { selectEditingIngredient } from 'src/app/store/selectors/shopping-list.selectors';
+import { Subscription } from 'rxjs';
 
 const INIT_INGREDIENT_STATE: Ingredient = {
   name: null,
@@ -19,28 +27,29 @@ const INIT_INGREDIENT_STATE: Ingredient = {
 export class ShoppingEditComponent implements OnInit {
   editMode: boolean = false;
   ingredient: Ingredient;
-  id: number;
   shoppingForm: FormGroup;
+  editingSubscription: Subscription;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private shoppingService: ShoppingListService
+    private store: Store<{ shoppingList: ShoppingListInitialState }>
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(({ id }) => {
-      this.editMode = id !== undefined;
-      this.id = this.editMode ? Number(id) : undefined;
-      this.initForm();
-    });
+    this.editingSubscription= this.store
+      .select(selectEditingIngredient)
+      .subscribe((editingIngredient) => {
+        if (editingIngredient) {
+          this.editMode = true;
+          this.ingredient = editingIngredient;
+        } else {
+          this.editMode = false;
+          this.ingredient = { ...INIT_INGREDIENT_STATE };
+        }
+        this.initForm();
+      });
   }
 
   private initForm() {
-    this.ingredient = this.editMode
-      ? this.shoppingService.getIngredient(this.id)
-      : INIT_INGREDIENT_STATE;
-
     this.shoppingForm = new FormGroup({
       name: new FormControl(this.ingredient.name, [Validators.required]),
       amount: new FormControl(this.ingredient.amount, [
@@ -51,16 +60,16 @@ export class ShoppingEditComponent implements OnInit {
   }
 
   onSubmit() {
-    const submitData: Ingredient = {
-      id: this.id,
+    const submitData = new Ingredient({
+      id: this.ingredient.id,
       name: this.shoppingForm.value.name,
       amount: this.shoppingForm.value.amount,
-    };
+    });
 
     if (this.editMode) {
-      this.shoppingService.editIngredient(submitData);
+      this.store.dispatch(updateIngredient({ payload: submitData }));
     } else {
-      this.shoppingService.addIngredient(new Ingredient(submitData));
+      this.store.dispatch(addIngredient({ payload: submitData }));
     }
 
     this.onClear();
@@ -68,9 +77,7 @@ export class ShoppingEditComponent implements OnInit {
 
   onClear() {
     this.shoppingForm.reset();
-
-    if (this.id) {
-      this.router.navigate([], { relativeTo: this.route, queryParams: {} });
-    }
+    this.store.dispatch(stopEditingIngredient());
+    this.editingSubscription.unsubscribe()
   }
 }

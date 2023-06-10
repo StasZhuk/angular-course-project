@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { User } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { logout } from 'src/app/store/actions/auth.actions';
+import { AuthInitialState } from 'src/app/store/reducers/auth.reducer';
+import { getUserSelector } from 'src/app/store/selectors/auth.selectors';
 
 @Component({
   selector: 'app-header',
@@ -15,11 +17,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private storageService: StorageService,
-    private authService: AuthService
+    private store: Store<{ auth: AuthInitialState }>
   ) {}
 
   ngOnInit(): void {
-    this.userSub = this.authService.user.subscribe((user) => {
+    this.userSub = this.store.select(getUserSelector).subscribe((user) => {
       this.isAuth = !!user;
     });
   }
@@ -33,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.authService.logout();
+    this.store.dispatch(logout());
   }
 
   ngOnDestroy(): void {

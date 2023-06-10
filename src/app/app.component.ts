@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from 'src/app/services/auth.service';
+import { getSession } from './store/actions/auth.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +11,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class AppComponent implements OnInit {
   title = 'angular-course';
 
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.authService.getSession();
+    this.store.dispatch(getSession())
   }
 }

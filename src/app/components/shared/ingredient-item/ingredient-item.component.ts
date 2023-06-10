@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input } from '@angular/core';
 
-import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingredient } from 'src/app/models/ingredient.model';
+import { Store } from '@ngrx/store';
+import { removeIngredient } from 'src/app/store/actions/shopping-list.actions';
 
 @Component({
   selector: 'app-ingredient-item',
@@ -13,24 +13,10 @@ export class IngredientItemComponent {
   @Input() ingredient: Ingredient;
   @Input() active: boolean;
   @Input() canDelete: boolean = false;
-  @Output() deletedItem = new EventEmitter<number>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private shoppingListService: ShoppingListService
-  ) {}
+  constructor(private store: Store) {}
 
   onDelete() {
-    this.shoppingListService.deleteIngredient(this.ingredient.id);
-  }
-
-  onSelect() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        id: this.ingredient.id,
-      },
-    });
+    this.store.dispatch(removeIngredient({ payload: this.ingredient.id }));
   }
 }

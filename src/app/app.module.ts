@@ -2,12 +2,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AppComponent } from 'src/app/app.component';
-import { HeaderComponent } from 'src/app/components/layout/header/header.component';
+import { AppComponent } from './app.component';
+import { HeaderComponent } from './components/layout/header/header.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared.module';
 import { CoreModule } from './core.module';
+import { AppStoreModule } from './store/store.module';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './store/effects/auth.effects';
 
 @NgModule({
   exports: [],
@@ -18,6 +21,8 @@ import { CoreModule } from './core.module';
     HttpClientModule,
     SharedModule,
     CoreModule,
+    AppStoreModule,
+    EffectsModule.forRoot([AuthEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

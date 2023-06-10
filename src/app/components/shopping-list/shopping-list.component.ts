@@ -1,9 +1,17 @@
-import { Subscription } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 
-import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingredient } from 'src/app/models/ingredient.model';
+import { ShoppingListInitialState } from 'src/app/store/reducers/shopping-list.reducer';
+import {
+  selectEditingIngredient,
+  selectIngredients,
+} from 'src/app/store/selectors/shopping-list.selectors';
+import {
+  startEditingIngredient,
+  stopEditingIngredient,
+} from 'src/app/store/actions/shopping-list.actions';
 
 @Component({
   selector: 'app-shopping-list',
@@ -11,28 +19,31 @@ import { Ingredient } from 'src/app/models/ingredient.model';
   styleUrls: ['./shopping-list.component.scss'],
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
-  ingredients: Ingredient[];
-  recipesServiceSubscription: Subscription;
+  ingredients$: Observable<Ingredient[]>;
+  editingSubscription: Subscription;
   activeId: Number;
 
   constructor(
-    private route: ActivatedRoute,
-    private serviceShoppingList: ShoppingListService
+    private store: Store<{ shoppingList: ShoppingListInitialState }>
   ) {}
 
   ngOnInit(): void {
-    this.ingredients = this.serviceShoppingList.getIngredients();
-    this.recipesServiceSubscription =
-      this.serviceShoppingList.ingredientsUpdated.subscribe((ingredients) => {
-        this.ingredients = ingredients;
-      });
-
-    this.route.queryParams.subscribe(({ id }) => {
-      this.activeId = id ? Number(id) : undefined;
+    this.ingredients$ = this.store.select(selectIngredients);
+    this.editingSubscription = this.store.select(selectEditingIngredient).subscribe((ingredient) => {
+      this.activeId = ingredient ? ingredient.id : null;
     });
   }
 
+  onToggleSelect(id: number) {
+    if (this.activeId === id) {
+      this.store.dispatch(stopEditingIngredient());
+    } else {
+      this.store.dispatch(startEditingIngredient({ payload: id }));
+    }
+  }
+
   ngOnDestroy(): void {
-    this.recipesServiceSubscription.unsubscribe();
+    this.editingSubscription.unsubscribe()
+    this.store.dispatch(stopEditingIngredient());
   }
 }
