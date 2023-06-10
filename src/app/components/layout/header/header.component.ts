@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+
 import { StorageService } from 'src/app/services/storage.service';
 import { logout } from 'src/app/store/actions/auth.actions';
-import { AuthInitialState } from 'src/app/store/reducers/auth.reducer';
 import { getUserSelector } from 'src/app/store/selectors/auth.selectors';
+import { AppStoreState } from 'src/app/store/store-root.reducer';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private storageService: StorageService,
-    private store: Store<{ auth: AuthInitialState }>
+    private store: Store<AppStoreState>
   ) {}
 
   ngOnInit(): void {

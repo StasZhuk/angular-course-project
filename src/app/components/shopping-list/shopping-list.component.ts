@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Ingredient } from 'src/app/models/ingredient.model';
-import { ShoppingListInitialState } from 'src/app/store/reducers/shopping-list.reducer';
 import {
   selectEditingIngredient,
   selectIngredients,
@@ -12,6 +11,7 @@ import {
   startEditingIngredient,
   stopEditingIngredient,
 } from 'src/app/store/actions/shopping-list.actions';
+import { AppStoreState } from 'src/app/store/store-root.reducer';
 
 @Component({
   selector: 'app-shopping-list',
@@ -23,15 +23,15 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   editingSubscription: Subscription;
   activeId: Number;
 
-  constructor(
-    private store: Store<{ shoppingList: ShoppingListInitialState }>
-  ) {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
     this.ingredients$ = this.store.select(selectIngredients);
-    this.editingSubscription = this.store.select(selectEditingIngredient).subscribe((ingredient) => {
-      this.activeId = ingredient ? ingredient.id : null;
-    });
+    this.editingSubscription = this.store
+      .select(selectEditingIngredient)
+      .subscribe((ingredient) => {
+        this.activeId = ingredient ? ingredient.id : null;
+      });
   }
 
   onToggleSelect(id: number) {
@@ -43,7 +43,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.editingSubscription.unsubscribe()
+    this.editingSubscription.unsubscribe();
     this.store.dispatch(stopEditingIngredient());
   }
 }

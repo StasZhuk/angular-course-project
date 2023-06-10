@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 import { REG_EXP_POSITIVE_NUMBERS } from 'src/app/constants/regexp';
 import { Ingredient } from 'src/app/models/ingredient.model';
-
-import { ShoppingListInitialState } from 'src/app/store/reducers/shopping-list.reducer';
 import {
   addIngredient,
   stopEditingIngredient,
   updateIngredient,
 } from 'src/app/store/actions/shopping-list.actions';
 import { selectEditingIngredient } from 'src/app/store/selectors/shopping-list.selectors';
-import { Subscription } from 'rxjs';
+import { AppStoreState } from 'src/app/store/store-root.reducer';
 
 const INIT_INGREDIENT_STATE: Ingredient = {
   name: null,
@@ -30,12 +29,10 @@ export class ShoppingEditComponent implements OnInit {
   shoppingForm: FormGroup;
   editingSubscription: Subscription;
 
-  constructor(
-    private store: Store<{ shoppingList: ShoppingListInitialState }>
-  ) {}
+  constructor(private store: Store<AppStoreState>) {}
 
   ngOnInit(): void {
-    this.editingSubscription= this.store
+    this.editingSubscription = this.store
       .select(selectEditingIngredient)
       .subscribe((editingIngredient) => {
         if (editingIngredient) {
@@ -78,6 +75,6 @@ export class ShoppingEditComponent implements OnInit {
   onClear() {
     this.shoppingForm.reset();
     this.store.dispatch(stopEditingIngredient());
-    this.editingSubscription.unsubscribe()
+    this.editingSubscription.unsubscribe();
   }
 }

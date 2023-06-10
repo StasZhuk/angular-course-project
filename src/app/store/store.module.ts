@@ -1,15 +1,9 @@
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
-import { shoppingListReducer } from './reducers/shopping-list.reducer';
-import { authReducer } from './reducers/auth.reducer';
-
-const store = {
-  shoppingList: shoppingListReducer,
-  auth: authReducer,
-};
+import { rootReducer } from './store-root.reducer';
 
 @NgModule({
-  imports: [StoreModule.forRoot(store)],
+  imports: [StoreModule.forRoot(rootReducer)],
   exports: [StoreModule],
 })
 export class AppStoreModule {}

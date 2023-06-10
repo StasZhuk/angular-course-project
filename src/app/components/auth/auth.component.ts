@@ -2,14 +2,14 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { RefDirective } from 'src/app/directives/ref.directive';
-
-import { AuthResponseData } from 'src/app/services/auth.service';
-import { AlertComponent } from '../base/alert/alert.component';
-import { AuthInitialState } from 'src/app/store/reducers/auth.reducer';
 import { Store } from '@ngrx/store';
+
+import { RefDirective } from 'src/app/directives/ref.directive';
+import { AuthResponseData } from 'src/app/services/auth.service';
+import { AlertComponent } from 'src/app/components/base/alert/alert.component';
 import { getUserSelector } from 'src/app/store/selectors/auth.selectors';
 import { login, signup } from 'src/app/store/actions/auth.actions';
+import { AppStoreState } from 'src/app/store/store-root.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -24,10 +24,7 @@ export class AuthComponent implements OnDestroy, OnInit {
 
   @ViewChild(RefDirective) alertTemplateRef: RefDirective;
 
-  constructor(
-    private store: Store<{ auth: AuthInitialState }>,
-    private router: Router
-  ) {
+  constructor(private store: Store<AppStoreState>, private router: Router) {
     this.store.select(getUserSelector).subscribe((user) => {
       if (user) {
         this.router.navigate(['recipe-book']);
@@ -35,9 +32,7 @@ export class AuthComponent implements OnDestroy, OnInit {
     });
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   onToggleMode() {
     this.isLoginMode = !this.isLoginMode;

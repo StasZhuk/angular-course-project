@@ -7,15 +7,16 @@ import {
 } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, take } from 'rxjs';
-import { AuthInitialState } from 'src/app/store/reducers/auth.reducer';
+
 import { getUserSelector } from 'src/app/store/selectors/auth.selectors';
+import { AppStoreState } from 'src/app/store/store-root.reducer';
 
 export const authGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
   const router = inject(Router);
-  const store = inject(Store<{ auth: AuthInitialState }>);
+  const store = inject(Store<AppStoreState>);
 
   return store.select(getUserSelector).pipe(
     take(1),
