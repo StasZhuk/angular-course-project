@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
 
 import { User, UserStorageData } from 'src/app//models/user.model';
+import { environment } from 'src/environments/environment';
 
-const API_KEY = 'AIzaSyANZrf2GJDHyCVhHaevcjaTaOwOOr6uPd0';
+const API_KEY = environment.firebaseApiKey;
 const AUTH_ENDPOINT = 'https://identitytoolkit.googleapis.com/v1/accounts';
 
 const endpointsNames = {
