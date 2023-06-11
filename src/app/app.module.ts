@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -11,6 +11,8 @@ import { CoreModule } from './core.module';
 import { AppStoreModule } from './store/store.module';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   exports: [],
@@ -23,6 +25,8 @@ import { AuthEffects } from './store/effects/auth.effects';
     CoreModule,
     AppStoreModule,
     EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    StoreDevtoolsModule.instrument({ logOnly: !environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent],

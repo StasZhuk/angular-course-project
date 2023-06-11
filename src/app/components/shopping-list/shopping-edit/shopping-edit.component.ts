@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -23,7 +23,7 @@ const INIT_INGREDIENT_STATE: Ingredient = {
   templateUrl: './shopping-edit.component.html',
   styleUrls: ['./shopping-edit.component.scss'],
 })
-export class ShoppingEditComponent implements OnInit {
+export class ShoppingEditComponent implements OnInit, OnDestroy {
   editMode: boolean = false;
   ingredient: Ingredient;
   shoppingForm: FormGroup;
@@ -74,7 +74,14 @@ export class ShoppingEditComponent implements OnInit {
 
   onClear() {
     this.shoppingForm.reset();
-    this.store.dispatch(stopEditingIngredient());
+
+    if (this.editMode) {
+      this.store.dispatch(stopEditingIngredient());
+    }
+  }
+
+  ngOnDestroy(): void {
     this.editingSubscription.unsubscribe();
+    this.onClear()
   }
 }
