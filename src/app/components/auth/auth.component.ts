@@ -1,14 +1,16 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { RefDirective } from 'src/app/directives/ref.directive';
-import { AuthResponseData } from 'src/app/services/auth.service';
 import { AlertComponent } from 'src/app/components/base/alert/alert.component';
-import { getUserSelector } from 'src/app/store/selectors/auth.selectors';
-import { login, signup } from 'src/app/store/actions/auth.actions';
+import { getAuthState } from 'src/app/store/selectors/auth.selectors';
+import {
+  loginError,
+  loginStart,
+  signup,
+} from 'src/app/store/actions/auth.actions';
 import { AppStoreState } from 'src/app/store/store-root.reducer';
 
 @Component({
@@ -21,22 +23,27 @@ export class AuthComponent implements OnDestroy, OnInit {
   isFetching: boolean = false;
   error: string = null;
   closeSubscription: Subscription;
+  authSubscription: Subscription;
 
   @ViewChild(RefDirective) alertTemplateRef: RefDirective;
 
-  constructor(private store: Store<AppStoreState>, private router: Router) {
-    this.store.select(getUserSelector).subscribe((user) => {
-      if (user) {
-        this.router.navigate(['recipe-book']);
-      }
-    });
-  }
+  constructor(private store: Store<AppStoreState>) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authSubscription = this.store
+      .select(getAuthState)
+      .subscribe((auth) => {
+        this.isFetching = auth.isLoading;
+        this.error = auth.error;
+
+        if (this.error) {
+          this.createErrorAlert(this.error);
+        }
+      });
+  }
 
   onToggleMode() {
     this.isLoginMode = !this.isLoginMode;
-    this.error = null;
   }
 
   onSubmit(formAuth: NgForm) {
@@ -44,30 +51,11 @@ export class AuthComponent implements OnDestroy, OnInit {
       return false;
     }
 
-    let authObserver: Observable<AuthResponseData>;
-    this.error = null;
-    this.isFetching = true;
-
     if (this.isLoginMode) {
-      // authObserver = this.authService.login(formAuth.value);
-      this.store.dispatch(login({ payload: formAuth.value }));
+      this.store.dispatch(loginStart({ payload: formAuth.value }));
     } else {
       this.store.dispatch(signup({ payload: formAuth.value }));
-      // authObserver = this.authService.signup(formAuth.value);
     }
-
-    // authObserver.subscribe({
-    //   next: () => {
-    //     this.isFetching = false;
-    //     formAuth.reset();
-    //     this.router.navigate(['/']);
-    //   },
-    //   error: (errorMessage) => {
-    //     this.isFetching = false;
-    //     this.error = errorMessage;
-    //     this.createErrorAlert(errorMessage);
-    //   },
-    // });
   }
 
   createErrorAlert(message: string) {
@@ -86,10 +74,12 @@ export class AuthComponent implements OnDestroy, OnInit {
   }
 
   onClose() {
-    this.error = null;
+    return this.store.dispatch(loginError({ payload: null }));
   }
 
   ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
+
     if (this.closeSubscription) {
       this.closeSubscription.unsubscribe();
     }

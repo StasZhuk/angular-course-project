@@ -1,16 +1,19 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, of, switchMap, take, tap, throwError } from 'rxjs';
+import { catchError, map, of, switchMap, take, tap } from 'rxjs';
 import { User, UserStorageData } from 'src/app/models/user.model';
 import {
+  AuthResponseData,
   getSession,
-  login,
+  loginSuccess,
+  loginError,
   logout,
-  setUser,
   signup,
+  loginStart,
+  setUser,
 } from '../actions/auth.actions';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 const API_KEY = environment.firebaseApiKey;
@@ -25,32 +28,18 @@ const getApiEndpoint = (endpointName) => {
   return `${AUTH_ENDPOINT}:${endpointName}?key=${API_KEY}`;
 };
 
-const errorNormalize = ({ error }: HttpErrorResponse) => {
-  let errorMessage = 'Unknown error!';
-
-  if (error && error.error) {
-    errorMessage = error.error.message;
-  }
-
-  return throwError(() => errorMessage);
-};
-
-export interface AuthResponseData {
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  displayName: string;
-  kind: string;
-  registered?: boolean;
-}
-
 @Injectable()
 export class AuthEffects {
-  getSession = createEffect(() => {
-    return this.actions$.pipe(
+  constructor(
+    private actions$: Actions,
+    private router: Router,
+    private http: HttpClient
+  ) {}
+
+  getSession = createEffect(() =>
+    this.actions$.pipe(
       ofType(getSession),
+      take(1),
       switchMap(() => {
         const userData: UserStorageData = JSON.parse(
           localStorage.getItem('user')
@@ -65,30 +54,30 @@ export class AuthEffects {
           );
 
           if (user.token) {
-            return of(setUser({ payload: user }));
+            return of(loginSuccess({ payload: user }));
           }
         }
 
         return of(setUser({ payload: null }));
       })
-    );
-  });
+    )
+  );
 
-  clearSession = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(logout),
-      take(1),
-      tap(() => {
-        localStorage.removeItem('user');
-        this.router.navigate(['/auth']);
-      })
-    );
-  });
+  clearSession = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(logout),
+        tap(() => {
+          localStorage.removeItem('user');
+          this.router.navigate(['/auth']);
+        })
+      ),
+    { dispatch: false }
+  );
 
-  authUser = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(login, signup),
-      take(1),
+  authUser = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loginStart, signup),
       switchMap((action) => {
         return this.http
           .post<AuthResponseData>(getApiEndpoint(endpointsNames.LOGIN), {
@@ -96,8 +85,7 @@ export class AuthEffects {
             returnSecureToken: true,
           })
           .pipe(
-            catchError(errorNormalize),
-            switchMap((authDataResponse) => {
+            map((authDataResponse: AuthResponseData) => {
               const expirationDate = new Date(
                 new Date().getTime() + Number(authDataResponse.expiresIn) * 1000
               );
@@ -108,16 +96,30 @@ export class AuthEffects {
                 expirationDate
               );
               localStorage.setItem('user', JSON.stringify(user));
-              return of(setUser({ payload: user }));
+              return loginSuccess({ payload: user });
+            }),
+            catchError(({ error }) => {
+              let errorMessage = 'Unknown error!';
+
+              if (error && error.error) {
+                errorMessage = error.error.message;
+              }
+
+              return of(loginError({ payload: errorMessage }));
             })
           );
       })
-    );
-  });
+    )
+  );
 
-  constructor(
-    private actions$: Actions,
-    private router: Router,
-    private http: HttpClient
-  ) {}
+  authSuccess = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loginSuccess),
+        tap(() => {
+          this.router.navigate(['/']);
+        })
+      ),
+    { dispatch: false }
+  );
 }
