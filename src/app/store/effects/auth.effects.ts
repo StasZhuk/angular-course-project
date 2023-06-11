@@ -54,7 +54,7 @@ export class AuthEffects {
           );
 
           if (user.token) {
-            return of(loginSuccess({ payload: user }));
+            return of(setUser({ payload: user }));
           }
         }
 
@@ -63,15 +63,15 @@ export class AuthEffects {
     )
   );
 
-  clearSession = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(logout),
-        tap(() => {
-          localStorage.removeItem('user');
-        })
-      ),
-    { dispatch: false }
+  clearSession = createEffect(() =>
+    this.actions$.pipe(
+      ofType(logout),
+      take(1),
+      tap(() => {
+        localStorage.removeItem('user');
+        this.router.navigate(['/auth']);
+      })
+    )
   );
 
   authUser = createEffect(() =>
@@ -111,14 +111,15 @@ export class AuthEffects {
     )
   );
 
-  authRedirect = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(loginSuccess, logout),
+  authSuccess = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(loginSuccess),
         tap(() => {
           this.router.navigate(['/']);
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 }
