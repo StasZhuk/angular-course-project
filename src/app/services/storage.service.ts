@@ -40,7 +40,6 @@ export class StorageService {
       .pipe(
         take(1),
         switchMap((recipes) => {
-          console.log(recipes);
           return this.http.put<Recipe[]>(RECIPES_URL, recipes);
         })
       )
