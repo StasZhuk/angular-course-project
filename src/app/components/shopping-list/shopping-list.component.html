@@ -4,7 +4,7 @@
 
     <hr />
     <ul class="list-group">
-      <li *ngFor="let ingredient of ingredients$ | async">
+      <li [@list] *ngFor="let ingredient of ingredients$ | async">
         <app-ingredient-item
           (click)="onToggleSelect(ingredient.id)"
           [canDelete]="true"

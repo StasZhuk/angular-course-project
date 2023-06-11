@@ -1,6 +1,13 @@
 import { Observable, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
 
 import { Ingredient } from 'src/app/models/ingredient.model';
 import {
@@ -17,6 +24,33 @@ import { AppStoreState } from 'src/app/store/store-root.reducer';
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.scss'],
+  animations: [
+    trigger('list', [
+      state(
+        'in',
+        style({
+          opacity: 1,
+          transform: 'translateX(0)',
+        })
+      ),
+      transition('void => *', [
+        style({
+          opacity: 0,
+          transform: 'translateX(-100px)',
+        }),
+        animate(300),
+      ]),
+      transition('* => void', [
+        animate(
+          300,
+          style({
+            opacity: 0,
+            transform: 'translateX(100px)',
+          })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
   ingredients$: Observable<Ingredient[]>;
