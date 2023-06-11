@@ -54,7 +54,7 @@ export class AuthEffects {
           );
 
           if (user.token) {
-            return of(setUser({ payload: user }));
+            return of(loginSuccess({ payload: user }));
           }
         }
 
