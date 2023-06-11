@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, tap } from 'rxjs';
+import { Subject, switchMap, take, tap } from 'rxjs';
 
 import { API_URL } from 'src/app/constants/api';
 import { Recipe } from 'src/app/models/recipe.model';
 
-import { RecipesService } from './recipes.service';
+import { AppStoreState } from '../store/store-root.reducer';
+import { Store } from '@ngrx/store';
+import { setRecipes } from '../store/actions/recipes.actions';
+import { selectRecipes } from '../store/selectors/recipes.selectors';
 
 const RECIPES_URL = API_URL + 'recipes.json';
 
@@ -16,17 +19,14 @@ export class StorageService {
   isFetchingRecipes = new Subject<boolean>();
   isSavingRecipes = new Subject<boolean>();
 
-  constructor(
-    private http: HttpClient,
-    private recipeService: RecipesService
-  ) {}
+  constructor(private http: HttpClient, private store: Store<AppStoreState>) {}
 
   fetchRecipeData() {
     this.isFetchingRecipes.next(true);
 
     return this.http.get<Recipe[]>(RECIPES_URL).pipe(
       tap((recipes) => {
-        this.recipeService.setRecipes(recipes);
+        this.store.dispatch(setRecipes({ payload: recipes }));
         this.isFetchingRecipes.next(false);
       })
     );
@@ -35,8 +35,15 @@ export class StorageService {
   saveRecipeData() {
     this.isSavingRecipes.next(true);
 
-    return this.http
-      .put<Recipe[]>(RECIPES_URL, this.recipeService.getRecipes())
+    return this.store
+      .select(selectRecipes)
+      .pipe(
+        take(1),
+        switchMap((recipes) => {
+          console.log(recipes);
+          return this.http.put<Recipe[]>(RECIPES_URL, recipes);
+        })
+      )
       .subscribe({
         next: () => {
           this.isSavingRecipes.next(false);

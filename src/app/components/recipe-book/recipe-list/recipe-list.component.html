@@ -4,10 +4,10 @@
   </div>
 </div>
 <hr />
-<p *ngIf="isFetching">Loading...</p>
-<p *ngIf="!isFetching && !recipes.length">No Recipes</p>
-<ul class="row" *ngIf="!isFetching && recipes.length">
-  <li class="col-xs-12" *ngFor="let recipeItem of recipes">
+<p *ngIf="isFetching$ | async">Loading...</p>
+<p *ngIf="!(isFetching$ | async) && !(recipes$ | async).length">No Recipes</p>
+<ul class="row" *ngIf="!(isFetching$ | async) && (recipes$ | async).length">
+  <li class="col-xs-12" *ngFor="let recipeItem of recipes$ | async">
     <app-recipe-item [recipe]="recipeItem"></app-recipe-item>
   </li>
 </ul>

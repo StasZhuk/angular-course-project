@@ -12,7 +12,7 @@ import { AppStoreModule } from './store/store.module';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/effects/auth.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from 'src/environments/environment';
+import { RecipesEffect } from './store/effects/recipes.effects';
 
 @NgModule({
   exports: [],
@@ -24,9 +24,8 @@ import { environment } from 'src/environments/environment';
     SharedModule,
     CoreModule,
     AppStoreModule,
-    EffectsModule.forRoot([AuthEffects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    StoreDevtoolsModule.instrument({ logOnly: !environment.production })
+    EffectsModule.forRoot([AuthEffects, RecipesEffect]),
+    StoreDevtoolsModule.instrument({ logOnly: !isDevMode() }),
   ],
   providers: [],
   bootstrap: [AppComponent],
