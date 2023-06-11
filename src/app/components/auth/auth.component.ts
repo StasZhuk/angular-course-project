@@ -7,6 +7,7 @@ import { RefDirective } from 'src/app/directives/ref.directive';
 import { AlertComponent } from 'src/app/components/base/alert/alert.component';
 import { getAuthState } from 'src/app/store/selectors/auth.selectors';
 import {
+  clearError,
   loginError,
   loginStart,
   signup,
@@ -74,7 +75,7 @@ export class AuthComponent implements OnDestroy, OnInit {
   }
 
   onClose() {
-    return this.store.dispatch(loginError({ payload: null }));
+    this.store.dispatch(clearError());
   }
 
   ngOnDestroy(): void {

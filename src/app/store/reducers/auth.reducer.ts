@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { User } from 'src/app/models/user.model';
 import {
+  clearError,
   loginError,
   loginStart,
   loginSuccess,
@@ -30,13 +31,9 @@ export const authReducer = createReducer(
       error: null,
     };
   }),
-  on(logout, (state) => {
-    return {
-      ...state,
-      user: null,
-      error: null,
-    };
-  }),
+  on(logout, () => ({
+    ...authInitialState,
+  })),
   on(loginStart, (state) => {
     return {
       ...state,
@@ -58,6 +55,12 @@ export const authReducer = createReducer(
       user: null,
       isLoading: false,
       error: action.payload,
+    };
+  }),
+  on(clearError, (state) => {
+    return {
+      ...state,
+      error: null,
     };
   })
 );

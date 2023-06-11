@@ -8,6 +8,7 @@ const LOGIN_ERROR = '[Auth] LoginError';
 const SIGNUP = '[Auth] Signup';
 const LOGOUT = '[Auth] Logout';
 const GET_SESSION = '[Auth] GetSession';
+const CLEAR_ERROR = '[Auth] ClearError';
 
 export interface AuthRequestData {
   email: string;
@@ -54,3 +55,5 @@ export const signup = createAction(
 );
 
 export const logout = createAction(LOGOUT);
+
+export const clearError = createAction(CLEAR_ERROR);

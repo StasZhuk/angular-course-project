@@ -69,7 +69,6 @@ export class AuthEffects {
         ofType(logout),
         tap(() => {
           localStorage.removeItem('user');
-          this.router.navigate(['/auth']);
         })
       ),
     { dispatch: false }
@@ -112,10 +111,10 @@ export class AuthEffects {
     )
   );
 
-  authSuccess = createEffect(
+  authRedirect = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(loginSuccess, logout),
         tap(() => {
           this.router.navigate(['/']);
         })
